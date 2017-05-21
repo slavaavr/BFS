@@ -59,6 +59,7 @@ public class Bfs {
                 break;
             }
         }
+        System.out.println(list);
         return temp;
     }
 }
