@@ -26,6 +26,21 @@ public class NewBfs {
         visited = new boolean[matrix.length];
     }
 
+    private boolean isCorrectMatrixDemention(int [][]matr){
+        for (int i = 0; i < matr.length; i++) {
+            if(matr.length != matr[i].length){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isCorrectInpurValues(Integer start_point,Integer search_point){
+        if (start_point <1 || start_point > matrix.length) return false;
+        if (search_point <1 || start_point > matrix.length) return false;
+        return true;
+    }
+
     /**
      * @param start_point - начальная точка для поиска пути.
      * @param search_point - конечная точка в поиске пути.
@@ -33,6 +48,9 @@ public class NewBfs {
      */
 
     public String run(Integer start_point,Integer search_point, TypeOutput typeOutput){
+
+        if(!isCorrectMatrixDemention(matrix)) return "invalid size of matrix";
+        if(!isCorrectInpurValues(start_point,search_point)) return "invalid input values";
 
         int counter=0;
         Queue<Integer> queue = new LinkedList<>();
@@ -44,8 +62,8 @@ public class NewBfs {
         while(!queue.isEmpty()){
             int index = queue.poll();
             for (int i = 0; i < matrix[index].length; i++) {
-               // if(index == search_point-1){break;} // отсечение обхода всех путей
-                if (matrix[index][i] == 0 || visited[i]) continue;
+                if(index == search_point-1){break;} // отсечение обхода всех путей
+                if (matrix[index][i] == 0  || (visited[i] && i!=search_point-1)) continue;
                 queue.add(i);
                 list.add(list.get(counter)+"-"+Integer.toString(i+1));
                 visited[i] = true;
@@ -56,7 +74,6 @@ public class NewBfs {
         Deque<Route> ans = new ArrayDeque<>();
         for (String s : list) {
             if (s.contains(search_point.toString())){
-                System.out.println(s);
                 Route r = new Route();
                 r.setRoute(s);
                 r.setWeight(getWeight(s));
@@ -66,8 +83,15 @@ public class NewBfs {
                 else ans.addLast(r);
             }
         }
-        System.out.println(ans);
-        System.out.println(list);
+        if (typeOutput == TypeOutput.MINROUTE){
+            if(!ans.isEmpty())
+                temp = ans.getFirst().toString();
+        }
+        else if (typeOutput == TypeOutput.PRINTALLROUTES) {
+            for (Route r : ans) {
+                temp += r + "\n";
+            }
+        }
         return temp;
     }
 
