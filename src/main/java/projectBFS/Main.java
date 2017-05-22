@@ -17,6 +17,5 @@ public class Main {
         };
         Bfs bfs = new Bfs();
         bfs.setMatrix(matrix);
-        System.out.println(bfs.run(1, 2));
     }
 }
